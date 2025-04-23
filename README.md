@@ -47,9 +47,9 @@ http://localhost:8000/
 
 To apply migrations and create a superuser, open a new terminal and run:
 # Apply migrations
-docker-compose exec web python manage.py migrate
+docker-compose exec backend python manage.py migrate
 
 # Create superuser
-docker-compose exec web python manage.py createsuperuser
+docker-compose exec backend python manage.py createsuperuser
 
 
