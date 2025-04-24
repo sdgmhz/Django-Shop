@@ -1,7 +1,12 @@
 # main modules
 django>4.2,<4.3
 pillow
+
+# env controller
 python-decouple
 
 # database modules
 psycopg[binary]
+
+# third party modules
+django-debug-toolbar
