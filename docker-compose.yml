@@ -34,6 +34,18 @@ services:
     restart: always
     depends_on:
       - db
+  
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@example.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    depends_on:
+      - db
+
       
   smtp4dev:
     image: rnwood/smtp4dev:v3
