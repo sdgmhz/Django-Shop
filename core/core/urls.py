@@ -19,9 +19,14 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from .views import refresh_captcha
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('website.urls')),
+    path('accounts/', include('accounts.urls')),
+    path("captcha/", include("captcha.urls")),
+    path("refresh-captcha/", refresh_captcha, name="captcha-refresh"),
 ]
 
 if settings.DEBUG:

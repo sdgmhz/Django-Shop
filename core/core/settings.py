@@ -42,8 +42,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # local apps
     'website.apps.WebsiteConfig',
     'accounts.apps.AccountsConfig',
+
+    # third party apps
+    "captcha",
+
 ]
 
 MIDDLEWARE = [
@@ -168,3 +173,5 @@ if SHOW_DEBUGGER_TOOLBAR:
 
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
+
+LOGIN_REDIRECT_URL = 'website:index'
