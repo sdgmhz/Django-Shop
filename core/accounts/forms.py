@@ -13,10 +13,20 @@ class CustomAuthenticationForm(auth_forms.AuthenticationForm):
     def confirm_login_allowed(self, user):
         super().confirm_login_allowed(user)
 
-        if not user.is_verified:
-            raise ValidationError("user is not verified")
+        # if not user.is_verified:
+        #     raise ValidationError("user is not verified")
         
     # class Meta:
     #     model = User
     #     fields = ('username', 'password', 'captcha')
+
+
+class CustomUserCreationForm(auth_forms.UserCreationForm):
+    """Custom user creation form with captcha."""
+
+    captcha = CaptchaField()
+
+    class Meta:
+        model = User
+        fields = ("email", "password1", "password2", "captcha")
     
