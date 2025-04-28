@@ -175,3 +175,4 @@ if SHOW_DEBUGGER_TOOLBAR:
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
 LOGIN_REDIRECT_URL = 'website:index'
+LOGOUT_REDIRECT_URL = 'website:index'
