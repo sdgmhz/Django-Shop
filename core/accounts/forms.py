@@ -1,9 +1,10 @@
 from django.contrib.auth import forms as auth_forms
 from captcha.fields import CaptchaField
-from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 
+
 User = get_user_model()
+
 
 class CustomAuthenticationForm(auth_forms.AuthenticationForm):
     """Custom authentication form with captcha."""
@@ -15,10 +16,10 @@ class CustomAuthenticationForm(auth_forms.AuthenticationForm):
 
         # if not user.is_verified:
         #     raise ValidationError("user is not verified")
-        
-    # class Meta:
-    #     model = User
-    #     fields = ('username', 'password', 'captcha')
+
+    class Meta:
+        model = User
+        fields = ('email', 'password')
 
 
 class CustomUserCreationForm(auth_forms.UserCreationForm):
@@ -28,5 +29,26 @@ class CustomUserCreationForm(auth_forms.UserCreationForm):
 
     class Meta:
         model = User
-        fields = ("email", "password1", "password2", "captcha")
+        fields = ("email", "password1", "password2")
+
+
+class CustomPasswordResetForm(auth_forms.PasswordResetForm):
+    """Custom password reset form with captcha."""
+    captcha = CaptchaField()
+
+    class Meta:
+        model = User
+        fields = ('email',)
     
+    
+    
+
+
+class CustomSetPasswordForm(auth_forms.SetPasswordForm):
+    """Custom set password form with captcha."""
+
+    captcha = CaptchaField()
+
+    class Meta:
+        model = User
+        fields = ("new_password1", "new_password2")
