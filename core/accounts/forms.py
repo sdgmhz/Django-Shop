@@ -20,7 +20,7 @@ class CustomAuthenticationForm(auth_forms.AuthenticationForm):
 
     class Meta:
         model = User
-        fields = ('email', 'password')
+        fields = ("email", "password")
 
 
 class CustomUserCreationForm(auth_forms.UserCreationForm):
@@ -35,11 +35,20 @@ class CustomUserCreationForm(auth_forms.UserCreationForm):
 
 class CustomPasswordResetForm(auth_forms.PasswordResetForm):
     """Custom password reset form with captcha."""
+
     captcha = CaptchaField()
 
-    def send_mail(self, subject_template_name, email_template_name,
-                  context, from_email, to_email, html_email_template_name=None):
-        
+    def send_mail(
+        self,
+        subject_template_name,
+        email_template_name,
+        context,
+        from_email,
+        to_email,
+        html_email_template_name=None,
+    ):
+        """Override send_mail to use Celery for sending email asynchronously"""
+
         safe_context = {
             "email": context.get("email"),
             "domain": context.get("domain"),
@@ -48,8 +57,7 @@ class CustomPasswordResetForm(auth_forms.PasswordResetForm):
             "user": context.get("user").pk,
             "token": context.get("token"),
             "protocol": context.get("protocol"),
-    }
-
+        }
 
         send_reset_email_task.delay(
             subject_template_name,
@@ -57,16 +65,12 @@ class CustomPasswordResetForm(auth_forms.PasswordResetForm):
             safe_context,
             from_email,
             to_email,
-            html_email_template_name
+            html_email_template_name,
         )
-
 
     class Meta:
         model = User
-        fields = ('email',)
-    
-    
-    
+        fields = ("email",)
 
 
 class CustomSetPasswordForm(auth_forms.SetPasswordForm):

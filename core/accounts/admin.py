@@ -9,13 +9,16 @@ UserModel = get_user_model()
 
 @admin.register(UserModel)
 class CustomUserAdmin(UserAdmin):
+    """Custom admin panel configuration for the CustomUser model."""
     model = UserModel
-    list_display = ("id","email", "is_superuser", "is_active", "is_verified")
+    list_display = ("id", "email", "is_superuser", "is_active", "is_verified")
     list_filter = ("email", "is_superuser", "is_active", "is_verified")
     search_fields = ("email",)
     ordering = ("created_date",)
     fieldsets = (
+        # Section: authentication credentials
         ("Authentication", {"fields": ("email", "password")}),
+        # Section: user permission flags
         (
             "Permissions",
             {
@@ -27,6 +30,7 @@ class CustomUserAdmin(UserAdmin):
                 )
             },
         ),
+        # Section: group and permission assignment
         (
             "group permissions",
             {
@@ -37,9 +41,11 @@ class CustomUserAdmin(UserAdmin):
                 )
             },
         ),
+        # Section: metadata
         ("Important date", {"fields": ("last_login",)}),
     )
     add_fieldsets = (
+        # Section: fields for user creation form
         (
             None,
             {
@@ -58,7 +64,10 @@ class CustomUserAdmin(UserAdmin):
         ),
     )
 
+
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ("id","user", "first_name","last_name","phone_number")
-    searching_fields = ("user","first_name","last_name","phone_number")
+    """Admin configuration for the Profile model."""
+    list_display = ("id", "user", "first_name", "last_name", "phone_number")
+    searching_fields = ("user", "first_name", "last_name", "phone_number")
+

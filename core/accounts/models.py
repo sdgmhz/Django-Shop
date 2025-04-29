@@ -10,12 +10,11 @@ from django.db.models.signals import post_save
 
 from .validators import validate_iranian_cellphone_number
 
+
 class CustomUserType(models.IntegerChoices):
-    customer = 1 , _("customer")
-    admin = 2 , _("admin")
-    superuser = 3 , _("superuser")
-
-
+    customer = 1, _("customer")
+    admin = 2, _("admin")
+    superuser = 3, _("superuser")
 
 
 class CustomUserManager(BaseUserManager):
@@ -63,8 +62,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_verified = models.BooleanField(default=False)
-    type = models.IntegerField(choices= CustomUserType.choices, default=CustomUserType.customer.value)
-
+    type = models.IntegerField(
+        choices=CustomUserType.choices, default=CustomUserType.customer.value
+    )
 
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
@@ -74,24 +74,25 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
-    
+
 
 class Profile(models.Model):
 
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    phone_number = models.CharField(max_length=12, validators=[validate_iranian_cellphone_number])
+    phone_number = models.CharField(
+        max_length=12, validators=[validate_iranian_cellphone_number]
+    )
 
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.user.email
-    
 
-@receiver(post_save,sender=CustomUser)
-def create_profile(sender,instance,created,**kwargs):
+
+@receiver(post_save, sender=CustomUser)
+def create_profile(sender, instance, created, **kwargs):
     if created and instance.type == CustomUserType.customer.value:
         Profile.objects.create(user=instance, pk=instance.pk)
-
