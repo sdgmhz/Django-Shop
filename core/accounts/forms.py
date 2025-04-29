@@ -1,6 +1,7 @@
 from django.contrib.auth import forms as auth_forms
 from captcha.fields import CaptchaField
 from django.contrib.auth import get_user_model
+from .tasks import send_reset_email_task
 
 
 User = get_user_model()
@@ -35,6 +36,30 @@ class CustomUserCreationForm(auth_forms.UserCreationForm):
 class CustomPasswordResetForm(auth_forms.PasswordResetForm):
     """Custom password reset form with captcha."""
     captcha = CaptchaField()
+
+    def send_mail(self, subject_template_name, email_template_name,
+                  context, from_email, to_email, html_email_template_name=None):
+        
+        safe_context = {
+            "email": context.get("email"),
+            "domain": context.get("domain"),
+            "site_name": context.get("site_name"),
+            "uid": context.get("uid"),
+            "user": context.get("user").pk,
+            "token": context.get("token"),
+            "protocol": context.get("protocol"),
+    }
+
+
+        send_reset_email_task.delay(
+            subject_template_name,
+            email_template_name,
+            safe_context,
+            from_email,
+            to_email,
+            html_email_template_name
+        )
+
 
     class Meta:
         model = User

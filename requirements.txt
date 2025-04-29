@@ -11,3 +11,5 @@ psycopg[binary]
 # third party modules
 django-debug-toolbar
 django-simple-captcha
+celery
+redis

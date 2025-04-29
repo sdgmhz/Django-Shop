@@ -182,3 +182,7 @@ LOGOUT_REDIRECT_URL = 'website:index'
 
 # password reset config
 PASSWORD_RESET_TIMEOUT = timedelta(days=2).total_seconds()
+
+
+# celery config
+CELERY_BROKER_URL = "redis://redis:6379/1"
