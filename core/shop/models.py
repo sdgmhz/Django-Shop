@@ -20,6 +20,9 @@ class ProductCategoryModel(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.title
+
 class ProductModel(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     category = models.ManyToManyField(ProductCategoryModel)
@@ -27,6 +30,7 @@ class ProductModel(models.Model):
     slug = models.SlugField(allow_unicode=True)
     image = models.ImageField(default="/default/product-image.png", upload_to="product/img/")
     description = models.TextField()
+    brief_description = models.TextField(null=True,blank=True)
     stock = models.PositiveIntegerField(default=0)
     price = models.DecimalField(default=0, max_digits=10, decimal_places=0)
     discount_percent = models.IntegerField(default=0, validators=[validate_discount_percent])
@@ -37,6 +41,9 @@ class ProductModel(models.Model):
 
     class Meta:
         ordering = ["-created_date"]
+
+    def __str__(self):
+        return self.title
 
 class ProductImageModel(models.Model):
     product = models.ForeignKey(ProductModel,on_delete=models.CASCADE)
