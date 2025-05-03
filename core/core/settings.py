@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     # local apps
     "website.apps.WebsiteConfig",
     "accounts.apps.AccountsConfig",
+    "shop.apps.ShopConfig",
     # third party apps
     "captcha",
 ]
