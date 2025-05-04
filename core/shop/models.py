@@ -2,8 +2,8 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from decimal import Decimal
+from django.core.validators import MaxValueValidator, MinValueValidator
 
-from .validators import validate_discount_percent
 
 
 User = get_user_model()
@@ -38,7 +38,7 @@ class ProductModel(models.Model):
     stock = models.PositiveIntegerField(default=0)
     price = models.DecimalField(default=0, max_digits=10, decimal_places=0)
     discount_percent = models.IntegerField(
-        default=0, validators=[validate_discount_percent]
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(100)]
     )
     status = models.IntegerField(
         choices=ProductStatusType.choices, default=ProductStatusType.draft.value
@@ -55,6 +55,9 @@ class ProductModel(models.Model):
     
     def get_price(self):
         return round(self.price * (1 - Decimal(self.discount_percent / 100)))
+    
+    def is_discounted(self):
+        return self.discount_percent != 0
 
 
 class ProductImageModel(models.Model):
