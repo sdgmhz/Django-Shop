@@ -4,6 +4,7 @@ from django.utils.text import slugify
 
 from shop.models import ProductCategoryModel
 
+
 class Command(BaseCommand):
     help = "Generate fake categories"
 
@@ -16,5 +17,7 @@ class Command(BaseCommand):
             title = " ".join(self.fake.words(2))
             slug = slugify(title, allow_unicode=True)
             ProductCategoryModel.objects.get_or_create(title=title, slug=slug)
-        
-        self.stdout.write(self.style.SUCCESS("Successfully generated 10 fake categories"))
+
+        self.stdout.write(
+            self.style.SUCCESS("Successfully generated 10 fake categories")
+        )
