@@ -5,7 +5,6 @@ from decimal import Decimal
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 
-
 User = get_user_model()
 
 
@@ -52,10 +51,10 @@ class ProductModel(models.Model):
 
     def __str__(self):
         return self.title
-    
+
     def get_price(self):
         return round(self.price * (1 - Decimal(self.discount_percent / 100)))
-    
+
     def is_discounted(self):
         return self.discount_percent != 0
 

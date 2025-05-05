@@ -68,7 +68,7 @@
 
               <!-- Navbar Collapse -->
               <div id="navbarVerticalNavMenu" class="collapse navbar-collapse">
-                  <form action="." class="w-100">
+                    <form action="." class="w-100">
 
                       <div class="border-bottom pb-4 mb-4">
                           <h5>جستو جوی کالا</h5>
@@ -110,6 +110,7 @@
                               </div>
                           </div>
                       </div>
+
                       <div class="d-grid">
                           <button type="submit" class="btn btn-outline-primary btn-transition mb-3">اعمال
                               فیلتر</button>
@@ -134,7 +135,7 @@
                   <div class="d-sm-flex justify-content-sm-end align-items-center">
                       <!-- Select -->
                       <div class="mb-2 mb-sm-0 me-sm-2">
-                          <select class="form-select form-select-sm" id="order-by-filter">
+                          <select class="form-select form-select-sm" id="order-by-filter" >
                               <option value="" selected>مرتب سازی</option>
                               <option value="-created_date">جدیدترین</option>
                               <option value="created_date">قدیمی ترین</option>
@@ -143,18 +144,20 @@
                           </select>
                       </div>
                       <!-- End Select -->
-                      <!-- Select -->
+                    
+                        <!-- Select -->
                       <div class="mb-2 mb-sm-0 me-sm-2">
-                          <select class="form-select form-select-sm" id="page-size-filter">
-                              <option value="" selected>تعداد در صفحه</option>
-                              <option value="5">5</option>
-                              <option value="10">10</option>
-                              <option value="20">20</option>
-                              <option value="30">30</option>
-                              <option value="50">50</option>
-                          </select>
-                      </div>
-                      <!-- End Select -->
+                        <select class="form-select form-select-sm" id="page-size-filter">
+                            <option value="" selected>تعداد در صفحه</option>
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="30">30</option>
+                            <option value="50">50</option>
+                        </select>
+                    </div>
+                    <!-- End Select -->
+                      
 
                       <!-- Nav -->
                       <ul class="nav nav-segment">
@@ -259,11 +262,11 @@
               {% if page_obj.has_previous %}
               
               <li class="page-item">
-                <a class="page-link" href="?page={{page_obj.previous_page_number}}" aria-label="Previous">
+                <button class="page-link" onclick="changePage(`{{ page_obj.previous_page_number }}`)" aria-label="Previous">
                   <span aria-hidden="true">
                     <i class="bi-chevron-double-right small"></i>
                   </span>
-                </a>
+                </button>
               </li>
               {% endif %}
               {% for i in page_obj.paginator.page_range  %}
@@ -271,23 +274,17 @@
               <li class="page-item active"><a class="page-link">{{i}}</a></li>
               
               {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %}
-              <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
-
-              
-              
+              <li class="page-item"><button class="page-link" onclick="changePage(`{{i}}`)">{{i}}</button></li>
               {% endif %}
-              
               {% endfor %}
               
-
               {% if page_obj.has_next %}
-              
               <li class="page-item">
-                <a class="page-link" href="?page={{page_obj.next_page_number}}" aria-label="Next">
+                <button class="page-link" onclick="changePage(`{{ page_obj.next_page_number }}`)" aria-label="Next">
                   <span aria-hidden="true">
                     <i class="bi-chevron-double-left small"></i>
                   </span>
-                </a>
+                </button>
               </li>
               {% endif %}
             </ul>
@@ -372,3 +369,44 @@
   
 
 {% endblock content %}
+
+{% block extra_js %}
+<script>
+    $( document ).ready(function() {
+        let current_url_params = new URLSearchParams(window.location.search);
+        $("#page-size-filter").val(current_url_params.get("page_size") || "");
+        $("#search-query-filter").val(current_url_params.get("q") || "");
+        $("#min-price-filter").val(current_url_params.get("min_price") || "");
+        $("#max-price-filter").val(current_url_params.get("max_price") || "");
+        $("#category-id-filter").val(current_url_params.get("category_id") || "");
+        $("#order-by-filter").val(current_url_params.get("order_by") || "");
+    });
+
+    $("#page-size-filter").change(function(){
+      let current_url_params = new URLSearchParams(window.location.search);
+      var selectedOption = $(this).val();
+      current_url_params.set("page_size", selectedOption);
+      let new_url = window.location.pathname + "?" + current_url_params.toString();
+      window.location.href = new_url;
+    });
+
+    $("#order-by-filter").change(function(){
+      let current_url_params = new URLSearchParams(window.location.search);
+      var selectedOption = $(this).val();
+      current_url_params.set("order_by", selectedOption);
+      let new_url = window.location.pathname + "?" + current_url_params.toString();
+      window.location.href = new_url;
+    });
+
+</script>
+
+<script>
+  function changePage(page_number){
+    let current_url_params = new URLSearchParams(window.location.search);
+    current_url_params.set("page", page_number);
+    let new_url = window.location.pathname + "?" + current_url_params.toString();
+    window.location.href = new_url;
+  };
+</script>
+
+{% endblock extra_js %}
