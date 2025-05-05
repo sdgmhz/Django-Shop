@@ -10,7 +10,7 @@ class Command(BaseCommand):
 
     def __init__(self, *args, **kwargs):
         super(Command, self).__init__(*args, **kwargs)
-        self.fake = Faker()
+        self.fake = Faker(locale="fa_IR")
 
     def handle(self, *args, **options):
         for _ in range(10):
