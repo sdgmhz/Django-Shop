@@ -4,6 +4,8 @@ from .models import ProductModel, ProductImageModel, ProductCategoryModel
 
 @admin.register(ProductModel)
 class ProductModelAdmin(admin.ModelAdmin):
+    """Admin configuration for ProductModel"""
+
     list_display = (
         "id",
         "title",
@@ -17,6 +19,8 @@ class ProductModelAdmin(admin.ModelAdmin):
 
 @admin.register(ProductCategoryModel)
 class ProductCategoryModelAdmin(admin.ModelAdmin):
+    """Admin configuration for ProductCategoryModel"""
+
     list_display = (
         "id",
         "title",
@@ -26,4 +30,6 @@ class ProductCategoryModelAdmin(admin.ModelAdmin):
 
 @admin.register(ProductImageModel)
 class ProductImageModel(admin.ModelAdmin):
+    """Admin configuration for ProductImageModel"""
+
     list_display = ("id", "file", "created_date")

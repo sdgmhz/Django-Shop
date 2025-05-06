@@ -6,13 +6,17 @@ from shop.models import ProductCategoryModel
 
 
 class Command(BaseCommand):
+    """Management command to generate fake product categories"""
+
     help = "Generate fake categories"
 
     def __init__(self, *args, **kwargs):
+        """Initialize the command and set up Faker"""
         super(Command, self).__init__(*args, **kwargs)
         self.fake = Faker(locale="fa_IR")
 
     def handle(self, *args, **options):
+        """Generate 10 fake product categories and save them"""
         for _ in range(10):
             title = " ".join(self.fake.words(2))
             slug = slugify(title, allow_unicode=True)

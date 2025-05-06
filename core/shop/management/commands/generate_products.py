@@ -13,13 +13,17 @@ BASE_DIR = Path(__file__).resolve().parent
 
 
 class Command(BaseCommand):
+    """Management command to generate fake product entries"""
+
     help = "Generate fake products"
 
     def __init__(self, *args, **kwargs):
+        """Initialize the command and set up Faker"""
         super(Command, self).__init__(*args, **kwargs)
         self.fake = Faker(locale="fa_IR")
 
     def handle(self, *args, **options):
+        """Generate 10 fake product instances with random data"""
         user = CustomUser.objects.get(type=CustomUserType.admin.value)
         # List of images
         image_list = [
