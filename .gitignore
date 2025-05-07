@@ -6,3 +6,5 @@ db.sqlite3
 
 # ignore database file
 postgres/data/*
+
+core/media/*

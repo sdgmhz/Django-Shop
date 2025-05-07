@@ -13,3 +13,7 @@ django-debug-toolbar
 django-simple-captcha
 celery
 redis
+
+# reformatting
+black
+flake8

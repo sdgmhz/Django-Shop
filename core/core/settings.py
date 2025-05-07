@@ -43,9 +43,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.humanize",
     # local apps
     "website.apps.WebsiteConfig",
     "accounts.apps.AccountsConfig",
+    "shop.apps.ShopConfig",
     # third party apps
     "captcha",
 ]
