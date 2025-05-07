@@ -11,4 +11,6 @@ urlpatterns = [
     path("contact/", views.ContactView.as_view(), name="contact"),
     # Route to about page
     path("about/", views.AboutView.as_view(), name="about"),
+    # Route to newsletter form submission view
+    path("newsletter/", views.NewsletterView.as_view(), name="newsletter"),
 ]
