@@ -342,4 +342,24 @@
   };
 </script>
 
+<script>
+    function addToCart(product_id){
+        $.ajax({
+            url: "{% url 'cart:session-add-product' %}",
+            method: "POST",
+            data: {
+                product_id: product_id,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+
+            },
+            success: function(response){
+                console.log(response);
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                console.log(errorThrown);
+            }
+        });
+    }
+</script>
+
 {% endblock extra_js %}
