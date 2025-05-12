@@ -52,6 +52,14 @@
                           </div>
 
                         </div>
+                        <div class="d-grid gap-1">
+                                        <div class="text-body">
+                                            <span class="small">قیمت هر واحد:</span>
+                                            <span
+                                                class="fw-semibold formatted-price small">{{item.product_obj.get_price}}</span>
+                                        </div>
+                                    </div>
+
                       </div>
                       <!-- End Col -->
 
@@ -59,10 +67,10 @@
                         <div class="row">
                           <div class="col-auto">
                             <!-- Select -->
-                            <select class="form-select form-select-sm mb-3">
+                            <select class="form-select form-select-sm mb-3" onchange="changeProductQuantity('{{item.product_id}}', this.value)">
                               {% with ''|center:item.product_obj.stock as range %}
                               {% for _ in range %}
-                                <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
+                                <option value="{{ forloop.counter }}" {% if forloop.counter == item.quantity %} selected {% endif %}>{{ forloop.counter }}</option>
                               {% endfor %}
                               {% endwith %}
                               
@@ -72,14 +80,16 @@
                           </div>
 
                           <div class="col-auto">
-                            <div class="d-grid gap-2">
-                              <a class="link-sm link-secondary small" href="javascript:;">
+                            <div class="d-grid gap-2 d-flex justify-content-between">
+                              <button class="btn btn-sm btn-icon" onclick="removeProduct('{{item.product_id}}')">
                                 <i class="bi-trash me-1"></i> حذف
-                              </a>
-
-                              <a class="link-sm link-secondary small" href="javascript:;">
-                                <i class="bi-heart-fill ms-1 "></i>جزو علایق
-                              </a>
+                              </button>
+                              {% if request.user.is_authenticated %}
+                              
+                              <button class="btn btn-sm btn-icon" href="javascript:;">
+                                <i class="bi-heart-fill ms-1 "></i> علایق
+                              </button>
+                              {% endif %}
                             </div>
                           </div>
                           <!-- End Col -->
@@ -179,7 +189,47 @@
 
 {% block extra_js %}
 <script>
+  function changeProductQuantity(product_id, quantity){
+    console.log(product_id, quantity)
+    $.ajax({
+            url: "{% url 'cart:session-update-product-quantity' %}",
+            method: "POST",
+            data: {
+                product_id: product_id,
+                quantity: quantity,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
 
+            },
+            success: function(response){
+                console.log(response);
+                window.location.reload();
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                console.log(errorThrown);
+            }
+        });
+  }
+
+
+  function removeProduct(product_id){
+    console.log(product_id)
+    $.ajax({
+            url: "{% url 'cart:session-remove-product' %}",
+            method: "POST",
+            data: {
+                product_id: product_id,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+
+            },
+            success: function(response){
+                console.log(response);
+                window.location.reload();
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                console.log(errorThrown);
+            }
+        });
+  }
 
 </script>
 
