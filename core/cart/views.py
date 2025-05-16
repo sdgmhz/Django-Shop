@@ -5,6 +5,7 @@ from .cart import CartSession
 
 
 class SessionAddProductView(View):
+    """View to add a product to the session-based cart"""
 
     def post(self, request, *args, **kwargs):
         cart = CartSession(request.session)
@@ -16,7 +17,34 @@ class SessionAddProductView(View):
         )
 
 
+class SessionIncreaseProductQuantityView(View):
+    """View to increase the quantity of a product in the session cart"""
+
+    def post(self, request, *args, **kwargs):
+        cart = CartSession(request.session)
+        product_id = request.POST.get("product_id")
+        if product_id:
+            cart.increase_product_quantity(product_id)
+        return JsonResponse(
+            {"cart": cart.get_cart_dict(), "total_quantity": cart.get_total_quantity()}
+        )
+
+
+class SessionDecreaseProductQuantityView(View):
+    """View to decrease the quantity of a product in the session cart"""
+
+    def post(self, request, *args, **kwargs):
+        cart = CartSession(request.session)
+        product_id = request.POST.get("product_id")
+        if product_id:
+            cart.decrease_product_quantity(product_id)
+        return JsonResponse(
+            {"cart": cart.get_cart_dict(), "total_quantity": cart.get_total_quantity()}
+        )
+
+
 class SessionRemoveProductView(View):
+    """View to remove a product from the session cart"""
 
     def post(self, request, *args, **kwargs):
         cart = CartSession(request.session)
@@ -29,6 +57,7 @@ class SessionRemoveProductView(View):
 
 
 class SessionUpdateProductQuantityView(View):
+    """View to update the quantity of a product in the session cart"""
 
     def post(self, request, *args, **kwargs):
         cart = CartSession(request.session)
@@ -42,6 +71,7 @@ class SessionUpdateProductQuantityView(View):
 
 
 class SessionCartSummaryView(TemplateView):
+    """View to display the session cart summary"""
     template_name = "cart/cart-summary.html"
 
     def get_context_data(self, **kwargs):

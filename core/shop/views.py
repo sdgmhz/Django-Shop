@@ -2,6 +2,7 @@ from django.views.generic import ListView, DetailView
 from django.core.exceptions import FieldError
 
 from .models import ProductModel, ProductStatusType, ProductCategoryModel
+from cart.cart import CartSession
 
 
 class ShopProductGridView(ListView):
@@ -62,3 +63,15 @@ class ShopProductDetailView(DetailView):
     queryset = ProductModel.objects.filter(
         status=ProductStatusType.published.value, stock__gt=0
     )  # Only published products
+
+    def get_context_data(self, **kwargs):
+        """Add additional context (matching item) to the context"""
+        context = super().get_context_data(**kwargs)
+        cart = CartSession(self.request.session)
+        cart_items = cart.get_cart_items()
+        matching_item = next(
+            (item for item in cart_items if int(item["product_id"]) == self.object.id),
+            None,
+        )
+        context["matching_item"] = matching_item
+        return context
