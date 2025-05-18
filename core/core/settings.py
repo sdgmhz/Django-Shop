@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "website.apps.WebsiteConfig",
     "accounts.apps.AccountsConfig",
     "shop.apps.ShopConfig",
+    "cart.apps.CartConfig",
     # third party apps
     "captcha",
 ]
@@ -75,6 +76,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "cart.context_processors.cart_processor",
             ],
         },
     },

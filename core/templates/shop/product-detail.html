@@ -79,48 +79,20 @@
 
           <!-- Price -->
           <div class="mb-5">
-            <span class="d-block mb-2">قیمت کل:</span>
+            <span class="d-block mb-2">قیمت:</span>
             {% if object.is_discounted %}
             <div class="d-flex align-items-center">
-              <h3 class="mb-0">{{object.get_price|intcomma}} تومان </h3>
-              <span class="ms-2"><del>{{object.price|intcomma}} تومان </del></span>
+              <h3 class="mb-0 formatted-price">{{object.get_price}}</h3>
+              <span class="me-2 formatted-price text-decoration-line-through">{{object.price}}</span>
             </div>
             {% else %}
             <div class="d-flex align-items-center">
-                <h3 class="mb-0">{{object.price|intcomma}} تومان </h3n>
+                <h3 class="mb-0 formatted-price">{{object.price}}</h3n>
               </div>
             {% endif %}
           </div>
           <!-- End Price -->
-
-          <!-- Quantity -->
-          <div class="quantity-counter mb-3">
-            <div class="js-quantity-counter row align-items-center">
-              <div class="col">
-                <span class="d-block small">تعداد را انتخاب کنید</span>
-                <input class="js-result form-control form-control-quantity-counter" type="text" value="1">
-              </div>
-              <!-- End Col -->
-
-              <div class="col-auto">
-                <a class="js-minus btn btn-outline-secondary btn-xs btn-icon rounded-circle" href="javascript:;">
-                  <svg width="8" height="2" viewBox="0 0 8 2" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0 1C0 0.723858 0.223858 0.5 0.5 0.5H7.5C7.77614 0.5 8 0.723858 8 1C8 1.27614 7.77614 1.5 7.5 1.5H0.5C0.223858 1.5 0 1.27614 0 1Z" fill="currentColor" />
-                  </svg>
-                </a>
-                <a class="js-plus btn btn-outline-secondary btn-xs btn-icon rounded-circle" href="javascript:;">
-                  <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M4 0C4.27614 0 4.5 0.223858 4.5 0.5V3.5H7.5C7.77614 3.5 8 3.72386 8 4C8 4.27614 7.77614 4.5 7.5 4.5H4.5V7.5C4.5 7.77614 4.27614 8 4 8C3.72386 8 3.5 7.77614 3.5 7.5V4.5H0.5C0.223858 4.5 0 4.27614 0 4C0 3.72386 0.223858 3.5 0.5 3.5H3.5V0.5C3.5 0.223858 3.72386 0 4 0Z" fill="currentColor" />
-                  </svg>
-                </a>
-              </div>
-              <!-- End Col -->
-            </div>
-            <!-- End Row -->
-          </div>
-          <!-- End Quantity -->
-
-          <!-- Accordion -->
+           <!-- Accordion -->
           <div class="accordion mb-5" id="shopCartAccordion">
             <!-- Collapse -->
             <div class="accordion-item">
@@ -176,11 +148,68 @@
             </div>
             <!-- End Collapse -->
           </div>
-          <!-- End Accordion -->
+          {% if matching_item %}
 
-          <div class="d-grid mb-4">
-            <button type="button" class="btn btn-primary btntransition">افزودن به سبد خرید</button>
+          <div class="quantity-counter mb-3">
+            <div class="js-quantity-counter row align-items-center">
+              <div class="col">
+                <span class="d-block small">{{matching_item.quantity}} عدد در سبد خرید شما </span>
+              </div>
+            </div>
           </div>
+          <div class="quantity-counter mb-3">
+            <div class="js-quantity-counter row align-items-center">
+              <div class="col">
+                <input class="js-result form-control form-control-quantity-counter" type="text" value="{{matching_item.quantity}}">
+              </div>
+              <!-- End Col -->
+              
+              <div class="col-auto">
+                {% if matching_item.quantity != 1 %}
+                <button class="js-minus btn btn-outline-secondary btn-xs btn-icon rounded-circle" onclick="decreaseProductQuantity('{{matching_item.product_id}}')">
+                  <svg width="8" height="2" viewBox="0 0 8 2" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 1C0 0.723858 0.223858 0.5 0.5 0.5H7.5C7.77614 0.5 8 0.723858 8 1C8 1.27614 7.77614 1.5 7.5 1.5H0.5C0.223858 1.5 0 1.27614 0 1Z" fill="currentColor" />
+                  </svg>
+                </button>
+                {% endif %}
+                {% if matching_item.quantity != object.stock %}
+                <button class="js-plus btn btn-outline-secondary btn-xs btn-icon rounded-circle" onclick="increaseProductQuantity('{{matching_item.product_id}}')">
+                  <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 0C4.27614 0 4.5 0.223858 4.5 0.5V3.5H7.5C7.77614 3.5 8 3.72386 8 4C8 4.27614 7.77614 4.5 7.5 4.5H4.5V7.5C4.5 7.77614 4.27614 8 4 8C3.72386 8 3.5 7.77614 3.5 7.5V4.5H0.5C0.223858 4.5 0 4.27614 0 4C0 3.72386 0.223858 3.5 0.5 3.5H3.5V0.5C3.5 0.223858 3.72386 0 4 0Z" fill="currentColor" />
+                  </svg>
+                </button>
+                {% endif %}
+                <div class="d-grid gap-2 d-flex justify-content-between">
+                              <button class="btn btn-sm btn-icon" onclick="removeProduct('{{matching_item.product_id}}')">
+                                <i class="bi-trash me-1"></i> حذف
+                              </button>
+                              {% if request.user.is_authenticated %}
+                              
+                              <button class="btn btn-sm btn-icon" href="javascript:;">
+                                <i class="bi-heart-fill ms-1 "></i> علایق
+                              </button>
+                              {% endif %}
+                            </div>
+              </div>
+              <!-- End Col -->
+            </div>
+            <!-- End Row -->
+          </div>
+          {% else %}
+        
+          <div class="d-grid mb-4">
+                <button type="button" onclick="addToCart('{{object.id}}')" class="btn btn-primary btntransition">افزودن به سبد خرید</button>
+          </div>
+          {% endif %}
+          <!-- Quantity -->
+          
+
+            
+          
+          <!-- End Quantity -->
+          
+
+          
 
           <!-- Media -->
           <div class="d-flex align-items-center">
@@ -561,3 +590,70 @@
 
 
 {% endblock content %}
+
+{% block extra_js %}
+<script>
+    function removeProduct(product_id){
+    console.log(product_id)
+    $.ajax({
+            url: "{% url 'cart:session-remove-product' %}",
+            method: "POST",
+            data: {
+                product_id: product_id,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+
+            },
+            success: function(response){
+                console.log(response);
+                window.location.reload();
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                console.log(errorThrown);
+            }
+        });
+  }
+
+
+   function increaseProductQuantity(product_id){
+    console.log(product_id)
+    $.ajax({
+            url: "{% url 'cart:session-increase-product-quantity' %}",
+            method: "POST",
+            data: {
+                product_id: product_id,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+
+            },
+            success: function(response){
+                console.log(response);
+                window.location.reload();
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                console.log(errorThrown);
+            }
+        });
+  }
+
+     function decreaseProductQuantity(product_id){
+    console.log(product_id)
+    $.ajax({
+            url: "{% url 'cart:session-decrease-product-quantity' %}",
+            method: "POST",
+            data: {
+                product_id: product_id,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+
+            },
+            success: function(response){
+                console.log(response);
+                window.location.reload();
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                console.log(errorThrown);
+            }
+        });
+  }
+
+</script>
+{% endblock extra_js %}
+

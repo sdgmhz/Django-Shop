@@ -24,6 +24,7 @@
 
     <!-- CSS Front Template -->
     <link rel="stylesheet" href="{% static 'css/theme.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
 
     <!-- CSS Toastify-->
     <link rel="stylesheet" href="{% static 'vendor/toastify/toastify.css' %}" />
@@ -61,19 +62,19 @@
           <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav">
               <li class="nav-item">
-                <a class="nav-link active" href="{% url "website:index" %}">صفحه اصلی</a>
+                <a class="nav-link {% if request.resolver_match.view_name == 'website:index' %} active {% endif %}" href="{% url "website:index" %}">صفحه اصلی</a>
               </li>
   
               <li class="nav-item">
-                <a class="nav-link " href="{% url "shop:product-grid" %}">لیست محصولات</a>
+                <a class="nav-link {% if request.resolver_match.view_name == 'shop:product-grid' %} active {% endif %}" href="{% url "shop:product-grid" %}">لیست محصولات</a>
               </li>
   
               <li class="nav-item">
-                <a class="nav-link " href="{% url "website:about" %}">درباره ما</a>
+                <a class="nav-link {% if request.resolver_match.view_name == 'website:about' %} active {% endif %} " href="{% url "website:about" %}">درباره ما</a>
               </li>
   
               <li class="nav-item">
-                <a class="nav-link " href="{% url "website:contact" %}">ارتباط با ما</a>
+                <a class="nav-link {% if request.resolver_match.view_name == 'website:contact' %} active {% endif %}" href="{% url "website:contact" %}">ارتباط با ما</a>
               </li>
   
   
@@ -86,11 +87,17 @@
                 <!-- End Search -->
   
                 <!-- Shopping Cart -->
-                <button type="button" class="btn btn-ghost-secondary btn-icon" type="button" data-bs-toggle="offcanvas"
+                {% comment %} <button type="button" class="btn btn-ghost-secondary btn-icon" type="button" data-bs-toggle="offcanvas"
                   data-bs-target="#offcanvasNavbarShoppingCart" aria-controls="offcanvasNavbarShoppingCart">
                   <i class="bi-basket"></i>
                   <span class="cart-item-count ">3</span>
+                </button> {% endcomment %}
+                
+                <a href="{% url "cart:session-cart-summary" %}" class="btn btn-ghost-secondary btn-icon">
+                  <i class="bi-basket"></i>
+                  <span class="cart-item-count" id="total-cart-item-count">{{cart.get_total_quantity}}</span>
                 </button>
+
                 <!-- End Shopping Cart -->
                  {% if request.user.is_authenticated %}
                  <button class="btn btn-ghost-secondary btn-icon" id="dropdownMenuLink"
@@ -511,6 +518,31 @@
 
   <!-- JS Toastify -->
   <script src="{% static 'vendor/toastify/toastify.js' %}"></script>
+
+  <!-- JS Custom -->
+  <script src="{% static 'js/custom.js' %}"></script>
+
+  <script>
+    function addToCart(product_id){
+        $.ajax({
+            url: "{% url 'cart:session-add-product' %}",
+            method: "POST",
+            data: {
+                product_id: product_id,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+
+            },
+            success: function(response){
+              $("#total-cart-item-count").html(response.total_quantity)
+                console.log(response);
+                window.location.reload();
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                console.log(errorThrown);
+            }
+        });
+    }
+</script>
 
   <!-- JS Plugins Init. -->
   <script>

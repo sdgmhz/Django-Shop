@@ -214,12 +214,12 @@
                           </h4>
                           {% if object.is_discounted %}
                           <p class="card-text text-dark fs-4">
-                              <span class="formatted-price">{{object.get_price|intcomma}} تومان </span>
+                              <span class="formatted-price">{{object.get_price}}  </span>
                               <span
-                                  class="text-body me-1 fs-6 formatted-price text-decoration-line-through">{{object.price|intcomma}} تومان </span>
+                                  class="text-body me-1 fs-6 text-decoration-line-through formatted-price">{{object.price}}  </span>
                           </p>
                           {% else %}
-                          <p class="card-text text-dark fs-4 formatted-price"> {{object.price|intcomma}} تومان </p>
+                          <p class="card-text text-dark fs-4 formatted-price"> {{object.price}}  </p>
                           {% endif %}
                       </div>
 
@@ -333,13 +333,8 @@
 
 </script>
 
-<script>
-  function changePage(page_number){
-    let current_url_params = new URLSearchParams(window.location.search);
-    current_url_params.set("page", page_number);
-    let new_url = window.location.pathname + "?" + current_url_params.toString();
-    window.location.href = new_url;
-  };
-</script>
+
+
+
 
 {% endblock extra_js %}

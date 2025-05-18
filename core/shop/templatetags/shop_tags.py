@@ -8,7 +8,7 @@ register = template.Library()
 def show_latest_products(arg=8):
     """Render the latest published products (default: 8 items)"""
     latest_products = ProductModel.objects.filter(
-        status=ProductStatusType.published.value
+        status=ProductStatusType.published.value, stock__gt=0
     ).order_by("-created_date")[:arg]
     return {"latest_products": latest_products}
 
@@ -19,6 +19,7 @@ def show_similar_products(product):
     similar_products = (
         ProductModel.objects.filter(
             status=ProductStatusType.published.value,
+            stock__gt=0,
             category__in=product.category.all(),
         )
         .exclude(id=product.id)
