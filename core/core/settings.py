@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "accounts.apps.AccountsConfig",
     "shop.apps.ShopConfig",
     "cart.apps.CartConfig",
+    "dashboard.apps.DashboardConfig",
     # third party apps
     "captcha",
 ]
