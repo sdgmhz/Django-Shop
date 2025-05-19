@@ -3,5 +3,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from ..permissions import HasCustomerAccessPermission
 
-class CustomerDashboardHomeView(LoginRequiredMixin, HasCustomerAccessPermission,  TemplateView):
-    template_name = 'dashboard/customer/home.html'
+
+class CustomerDashboardHomeView(
+    LoginRequiredMixin, HasCustomerAccessPermission, TemplateView
+):
+    template_name = "dashboard/customer/home.html"

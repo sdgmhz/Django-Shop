@@ -23,7 +23,7 @@ urlpatterns = [
         views.SessionUpdateProductQuantityView.as_view(),
         name="session-update-product-quantity",
     ),
-     # Route to view session cart summary
+    # Route to view session cart summary
     path(
         "session/cart/summary/",
         views.SessionCartSummaryView.as_view(),

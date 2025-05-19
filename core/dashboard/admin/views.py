@@ -3,5 +3,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from ..permissions import HasAdminAccessPermission
 
-class AdminDashboardHomeView(LoginRequiredMixin, HasAdminAccessPermission, TemplateView):
-    template_name = 'dashboard/admin/home.html'
+
+class AdminDashboardHomeView(
+    LoginRequiredMixin, HasAdminAccessPermission, TemplateView
+):
+    template_name = "dashboard/admin/home.html"

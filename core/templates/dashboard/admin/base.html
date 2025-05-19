@@ -9,7 +9,7 @@
     <!-- Title -->
     <title>
       {% block title %}
-      {% endblock %}
+      {% endblock title %}
     </title>
 
     <!-- Favicon -->
@@ -93,10 +93,10 @@
                   <span class="cart-item-count ">3</span>
                 </button> {% endcomment %}
                 
-                <a href="{% url "cart:session-cart-summary" %}" class="btn btn-ghost-secondary btn-icon">
+                <button href="{% url "cart:session-cart-summary" %}" class="btn btn-ghost-secondary btn-icon">
                   <i class="bi-basket"></i>
                   <span class="cart-item-count" id="total-cart-item-count">{{cart.get_total_quantity}}</span>
-                </a>
+                </button>
 
                 <!-- End Shopping Cart -->
                  {% if request.user.is_authenticated %}
@@ -127,46 +127,71 @@
   
     <!-- ========== END HEADER ========== -->
   
-    <!-- ========== MAIN CONTENT ========== -->
+        <!-- ========== MAIN CONTENT ========== -->
+    <main id="content" role="main" class="bg-light content-space-2">
+        <!-- Breadcrumb -->
+        <div class="navbar-dark bg-dark" style="
+                background-image: url({% static 'svg/components/wave-pattern-light.svg' %});
+                ">
+            <div class="container content-space-1 content-space-b-lg-3">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <div class="d-none d-lg-block">
+                            <h1 class="h2 text-white">داشبورد</h1>
+                        </div>
 
- 
-  <main id="content" role="main"> {% block content %}{% endblock %}</main>
+                        <!-- Breadcrumb -->
+                        {% block breadcrumb %}
 
-   <!-- ========== END MAIN CONTENT ========== -->
+                        {% endblock breadcrumb %}
+                        <!-- End Breadcrumb -->
+                    </div>
+                    <!-- End Col -->
 
-    <!-- Subscribe -->
-<div class="bg-light">
-  <div class="container content-space-2">
-    <div class="w-md-75 w-lg-50 text-center mx-md-auto">
-      <div class="row justify-content-lg-between">
-        <!-- Heading -->
-        <div class="mb-5">
-          <span class="text-cap">ثبت نام</span>
-          <h2>اخبار جدید را دریافت کنید</h2>
-        </div>
-        <!-- End Heading -->
-
-        <form method="post" action="{% url "website:newsletter" %}">
-          {% csrf_token %}
-          <!-- Input Card -->
-          <div class="input-card input-card-pill input-card-sm border mb-3">
-            <div class="input-card-form">
-              <label for="subscribeForm" class="form-label visually-hidden">ایمیل را وارد کنید</label>
-              <input type="text" name="email" required class="form-control form-control-lg" id="subscribeForm"
-                placeholder="ایمیل خود را وارد نمایید" aria-label="ایمیل خود را وارد کنید">
+                    <div class="col-auto">
+                        <div class="d-none d-lg-block">
+                            <a class="btn btn-soft-light btn-sm" href="{% url 'accounts:logout' %}">خروج</a>
+                        </div>
+                        <!-- Responsive Toggle Button -->
+                        <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#sidebarNav" aria-controls="sidebarNav" aria-expanded="false"
+                            aria-label="Toggle navigation">
+                            <span class="navbar-toggler-default">
+                                <i class="bi-list"></i>
+                            </span>
+                            <span class="navbar-toggler-toggled">
+                                <i class="bi-x"></i>
+                            </span>
+                        </button>
+                        <!-- End Responsive Toggle Button -->
+                    </div>
+                    <!-- End Col -->
+                </div>
+                <!-- End Row -->
             </div>
-            <button type="submit" class="btn btn-primary btn-lg rounded-pill">ثبت نام</button>
-          </div>
-          <!-- End Input Card -->
-        </form>
+        </div>
+        <!-- End Breadcrumb -->
+        <!-- Content Section -->
+        <div class="container content-space-1 content-space-t-lg-0 content-space-b-lg-2 mt-lg-n10">
+            <div class="row">
+                <div class="col-lg-3">
+                    {% include 'dashboard/admin/sidebar.html' %}
+                </div>
+                <!-- End Col -->
 
-        <p class="small">می توانید در هر زمانی اشتراک خود را لغو کنید <a href="#">سیاست حفظ حریم خصوصی</a> ما را
-          بخوانید</p>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- End Subscribe -->
+                <div class="col-lg-9">
+                    {% block content %}
+                    {% endblock content %}
+
+                </div>
+                <!-- End Col -->
+            </div>
+            <!-- End Row -->
+        </div>
+        <!-- End Content Section -->
+    </main>
+
+
 
     <!-- Clients -->
     <div class="container content-space-2">
@@ -403,108 +428,7 @@
     </div>
   </div>
 
-  <!-- Offcanvas Search -->
-  <div class="offcanvas offcanvas-end " tabindex="-1" id="offcanvasNavbarShoppingCart">
-    <div class="offcanvas-header justify-content-between border-0 pb-0 ">
-      <span> 3 کالا</span>
-      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
 
-    <div class="offcanvas-body">
-
-      <div class="">
-        <!-- Product -->
-        <div class="border-bottom  mb-4">
-          <div class="d-flex">
-            <div class="flex-shrink-0">
-              <div class="avatar avatar-lg ms-3">
-                <img class="avatar-img" src="{% static 'img/320x320/img2.jpg' %}" alt="Image Description">
-              </div>
-            </div>
-
-            <div class="flex-grow-1">
-              <a class="h5" href="/product-overview.html">کوله پشتی ملی اصل</a>
-
-              <div class="d-grid py-3">
-                <div class="text-body py-1">
-                  <div class="d-flex justify-content-start align-items-center">
-                    <span class="h6">تعداد:</span>
-                    <div class="quantity">
-                      <div class="input-group input-group-sm quantity-selector px-5">
-                        <button type="button" class="btn btn-sm btn-icon btn-outline-primary">
-                          <i class="bi-plus"></i>
-                        </button>
-                        <input type="number" class="form-control" value="2" min="1" max="10">
-                        <button type="button" class="btn btn-sm btn-icon btn-outline-danger">
-                          <i class="bi-dash"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-                <div class="text-body py-1">
-                  <div class="d-flex justify-content-start  align-items-center">
-                    <span class="h6">قیمت:</span>
-                    <span class="px-5">150000 تومان</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- End Product -->
-        <!-- Product -->
-        <div class="border-bottom  mb-4">
-          <div class="d-flex">
-            <div class="flex-shrink-0">
-              <div class="avatar avatar-lg ms-3">
-                <img class="avatar-img" src="{% static 'img/320x320/img3.jpg' %}" alt="Image Description">
-              </div>
-            </div>
-
-            <div class="flex-grow-1">
-              <a class="h5" href="/product-overview.html">تیشرت مشکی</a>
-
-              <div class="d-grid py-3">
-                <div class="text-body py-1">
-                  <div class="d-flex justify-content-start align-items-center">
-                    <span class="h6">تعداد:</span>
-                    <div class="quantity">
-                      <div class="input-group input-group-sm quantity-selector px-5">
-                        <button type="button" class="btn btn-sm btn-icon btn-outline-primary">
-                          <i class="bi-plus"></i>
-                        </button>
-                        <input type="number" class="form-control" value="1" min="1" max="10">
-                        <button type="button" class="btn btn-sm btn-icon btn-outline-danger">
-                          <i class="bi-trash"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-                <div class="text-body py-1">
-                  <div class="d-flex justify-content-start  align-items-center">
-                    <span class="h6">قیمت:</span>
-                    <span class="px-5">100000 تومان</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- End Product -->
-
-      </div>
-      
-      <div class="d-grid">
-        <p class="text-center">قیمت نهایی: 35000 تومان</p>
-        <a class="btn btn-primary btn-lg" href="/cart.html">سبد خرید</a>
-      </div>
-
-    </div>
-  </div>
   <!-- ========== END SECONDARY CONTENTS ========== -->
 
   <!-- JS Jquery -->
@@ -522,27 +446,7 @@
   <!-- JS Custom -->
   <script src="{% static 'js/custom.js' %}"></script>
 
-  <script>
-    function addToCart(product_id){
-        $.ajax({
-            url: "{% url 'cart:session-add-product' %}",
-            method: "POST",
-            data: {
-                product_id: product_id,
-                csrfmiddlewaretoken: '{{ csrf_token }}'
 
-            },
-            success: function(response){
-              $("#total-cart-item-count").html(response.total_quantity)
-                console.log(response);
-                window.location.reload();
-            },
-            error: function(jqXHR, textStatus, errorThrown){
-                console.log(errorThrown);
-            }
-        });
-    }
-</script>
 
   <!-- JS Plugins Init. -->
   <script>
