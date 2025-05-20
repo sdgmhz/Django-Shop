@@ -184,7 +184,7 @@
       <!-- Breadcrumb -->
       <div
         class="navbar-dark bg-dark"
-        style="background-image: url({% static '/svg/components/wave-pattern-light.svg' %})>
+        style="background-image: url({% static '/svg/components/wave-pattern-light.svg' %});">
         <div class="container content-space-1 content-space-b-lg-3">
           <div class="row align-items-center">
             <div class="col">
@@ -193,7 +193,8 @@
               </div>
 
               <!-- Breadcrumb -->
-              {% block breadcrumb %} {% endblock breadcrumb %}
+              {% block breadcrumb %} 
+              {% endblock breadcrumb %}
               <!-- End Breadcrumb -->
             </div>
             <!-- End Col -->
@@ -241,13 +242,50 @@
           </div>
           <!-- End Col -->
 
-          <div class="col-lg-9">{% block content %} {% endblock content %}</div>
+          <div class="col-lg-9">{% block content %} 
+            {% endblock content %}</div>
           <!-- End Col -->
         </div>
         <!-- End Row -->
       </div>
       <!-- End Content Section -->
     </main>
+        <!-- Clients -->
+    <div class="container content-space-2">
+      <div class="row">
+        <div class="col text-center py-3">
+          <img class="avatar avatar-lg avatar-4x3" src="{% static 'svg/brands/hollister-dark.svg' %}" alt="Logo">
+        </div>
+        <!-- End Col -->
+
+        <div class="col text-center py-3">
+          <img class="avatar avatar-lg avatar-4x3" src="{% static 'svg/brands/levis-dark.svg' %}" alt="Logo">
+        </div>
+        <!-- End Col -->
+
+        <div class="col text-center py-3">
+          <img class="avatar avatar-lg avatar-4x3" src="{% static 'svg/brands/new-balance-dark.svg' %}" alt="Logo">
+        </div>
+        <!-- End Col -->
+
+        <div class="col text-center py-3">
+          <img class="avatar avatar-lg avatar-4x3" src="{% static 'svg/brands/puma-dark.svg' %}" alt="Logo">
+        </div>
+        <!-- End Col -->
+
+        <div class="col text-center py-3">
+          <img class="avatar avatar-lg avatar-4x3" src="{% static 'svg/brands/nike-dark.svg' %}" alt="Logo">
+        </div>
+        <!-- End Col -->
+
+        <div class="col text-center py-3">
+          <img class="avatar avatar-lg avatar-4x3" src="{% static 'svg/brands/tnf-dark.svg' %}" alt="Logo">
+        </div>
+        <!-- End Col -->
+      </div>
+      <!-- End Row -->
+    </div>
+    <!-- End Clients -->
 
     <!-- ========== FOOTER ========== -->
     <footer class="border-top">

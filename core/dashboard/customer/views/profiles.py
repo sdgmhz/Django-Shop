@@ -1,4 +1,4 @@
-from django.views.generic import TemplateView, UpdateView
+from django.views.generic import UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
@@ -6,48 +6,42 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect
 from django.contrib import messages
 
-from ..permissions import HasAdminAccessPermission
-from .forms import AdminPasswordChangeForm, AdminProfileEditForm
+from dashboard.permissions import HasCustomerAccessPermission
+from dashboard.customer.forms import CustomerPasswordChangeForm, CustomerProfileEditForm
 from accounts.models import Profile
 
 
-class AdminDashboardHomeView(
-    LoginRequiredMixin, HasAdminAccessPermission, TemplateView
-):
-    template_name = "dashboard/admin/home.html"
-
-
-class AdminSecurityEditView(
+class CustomerSecurityEditView(
     LoginRequiredMixin,
-    HasAdminAccessPermission,
+    HasCustomerAccessPermission,
     SuccessMessageMixin,
     auth_views.PasswordChangeView,
 ):
-    template_name = "dashboard/admin/profile/security-edit.html"
-    form_class = AdminPasswordChangeForm
-    success_url = reverse_lazy("dashboard:admin:security-edit")
+    template_name = "dashboard/customer/profile/security-edit.html"
+    form_class = CustomerPasswordChangeForm
+    success_url = reverse_lazy("dashboard:customer:security-edit")
     success_message = "بروزرسانی پسورد با موفقیت انجام شد"
 
 
-class AdminProfileEditView(
-    LoginRequiredMixin, HasAdminAccessPermission, SuccessMessageMixin, UpdateView
+class CustomerProfileEditView(
+    LoginRequiredMixin, HasCustomerAccessPermission, SuccessMessageMixin, UpdateView
 ):
-    template_name = "dashboard/admin/profile/profile-edit.html"
-    form_class = AdminProfileEditForm
-    success_url = reverse_lazy("dashboard:admin:profile-edit")
+    template_name = "dashboard/customer/profile/profile-edit.html"
+    form_class = CustomerProfileEditForm
+    success_url = reverse_lazy("dashboard:customer:profile-edit")
     success_message = "بروزرسانی پروفایل با موفقیت انجام شد"
 
     def get_object(self, queryset=None):
         return Profile.objects.get(user=self.request.user)
 
 
-class AdminProfileImageEditView(
-    LoginRequiredMixin, HasAdminAccessPermission, SuccessMessageMixin, UpdateView
+class CustomerProfileImageEditView(
+    LoginRequiredMixin, HasCustomerAccessPermission, SuccessMessageMixin, UpdateView
 ):
     http_method_names = ["post"]
     model = Profile
     fields = ("image",)
-    success_url = reverse_lazy("dashboard:admin:profile-edit")
+    success_url = reverse_lazy("dashboard:customer:profile-edit")
     success_message = "بروزرسانی تصویر پروفایل با موفقیت انجام شد"
 
     def get_object(self, queryset=None):
