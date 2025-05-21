@@ -67,6 +67,9 @@ class ProductModel(models.Model):
     def is_discounted(self):
         """Check if product has a discount"""
         return self.discount_percent != 0
+    
+    def is_published(self):
+        return self.status == ProductStatusType.published.value
 
 
 class ProductImageModel(models.Model):

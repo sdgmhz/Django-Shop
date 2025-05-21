@@ -1,15 +1,14 @@
-from django.views.generic import ListView, DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView
 from django.core.exceptions import FieldError
 
-from .models import ProductModel, ProductStatusType, ProductCategoryModel
-from cart.cart import CartSession
 
+from dashboard.permissions import HasAdminAccessPermission
+from shop.models import ProductModel, ProductStatusType, ProductCategoryModel
 
-class ShopProductGridView(ListView):
-    """View to display a grid of products with pagination and filters"""
-
-    template_name = "shop/product-grid.html"
-    paginate_by = 9
+class AdminProductListView(LoginRequiredMixin, HasAdminAccessPermission, ListView):
+    template_name = "dashboard/admin/products/product-list.html"
+    paginate_by = 10
 
     def get_paginate_by(self, queryset):
         """Return the number of products to display per page (based on query parameter)"""
@@ -17,9 +16,7 @@ class ShopProductGridView(ListView):
 
     def get_queryset(self):
         """Return the filtered product list based on query parameters"""
-        queryset = ProductModel.objects.filter(
-            status=ProductStatusType.published.value
-        )
+        queryset = ProductModel.objects.all()
 
         # Filter by search query if provided
         if search_q := self.request.GET.get("q"):
@@ -53,25 +50,4 @@ class ShopProductGridView(ListView):
         context["categories"] = (
             ProductCategoryModel.objects.all()
         )  # List of all product categories
-        return context
-
-
-class ShopProductDetailView(DetailView):
-    """View to display details of a specific product"""
-
-    template_name = "shop/product-detail.html"
-    queryset = ProductModel.objects.filter(
-        status=ProductStatusType.published.value
-    )  # Only published products
-
-    def get_context_data(self, **kwargs):
-        """Add additional context (matching item) to the context"""
-        context = super().get_context_data(**kwargs)
-        cart = CartSession(self.request.session)
-        cart_items = cart.get_cart_items()
-        matching_item = next(
-            (item for item in cart_items if int(item["product_id"]) == self.object.id),
-            None,
-        )
-        context["matching_item"] = matching_item
         return context

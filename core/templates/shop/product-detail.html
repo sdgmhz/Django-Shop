@@ -148,6 +148,7 @@
             </div>
             <!-- End Collapse -->
           </div>
+          {% if object.stock != 0 %}
           {% if matching_item %}
 
           <div class="quantity-counter mb-3">
@@ -201,6 +202,10 @@
                 <button type="button" onclick="addToCart('{{object.id}}')" class="btn btn-primary btntransition">افزودن به سبد خرید</button>
           </div>
           {% endif %}
+          {% else %}
+                        <button type="button" disabled class="btn btn-outline-primary btn-sm btn-transition btn-info rounded-pill"
+                          >این کالا در حال حاضر موجود نیست</button>
+                              {% endif %}
           <!-- Quantity -->
           
 
