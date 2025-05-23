@@ -115,6 +115,13 @@
 {% endblock %}
 
 {% block extra_js %}
+{{form.media}}
+{% comment %} <script src="{% static 'ckeditor/ckeditor.js' %}"></script> 
+
+<script>
+    CKEDITOR.replace('id_description');
+</script>  {% endcomment %}
+
 <script>
 
     function generateSlug() {

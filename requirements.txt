@@ -13,6 +13,7 @@ django-debug-toolbar
 django-simple-captcha
 celery
 redis
+django-ckeditor
 
 # reformatting
 black

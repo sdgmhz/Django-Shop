@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "dashboard.apps.DashboardConfig",
     # third party apps
     "captcha",
+    "ckeditor",
 ]
 
 MIDDLEWARE = [
@@ -190,3 +191,14 @@ PASSWORD_RESET_TIMEOUT = timedelta(days=2).total_seconds()
 
 # celery config
 CELERY_BROKER_URL = "redis://redis:6379/1"
+
+# ckeditor
+CKEDITOR_UPLOAD_PATH = "ckeditor/"
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'height': 300,
+        'width': '100%',
+    },
+}

@@ -1,9 +1,11 @@
 from django import forms
+from ckeditor.fields import RichTextFormField
 
 from shop.models import ProductModel
 
 
 class ProductForm(forms.ModelForm):
+    description = RichTextFormField()
 
     class Meta:
         model = ProductModel
