@@ -119,7 +119,7 @@
               <td>
                 <a
                   class="btn btn-sm btn-icon btn-ghost-secondary"
-                  href="./admin-account-products-single.html"
+                  href="{% url "dashboard:admin:product-edit" object.pk %}"
                   ><i class="bi-pencil-square"></i
                 ></a>
                 {% if object.is_published %}

@@ -1,10 +1,13 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView
+from django.views.generic import ListView, UpdateView
 from django.core.exceptions import FieldError
-
+from django.contrib.messages.views import SuccessMessageMixin
+from django.urls import reverse_lazy
 
 from dashboard.permissions import HasAdminAccessPermission
 from shop.models import ProductModel, ProductStatusType, ProductCategoryModel
+from dashboard.admin.forms import ProductForm
+
 
 class AdminProductListView(LoginRequiredMixin, HasAdminAccessPermission, ListView):
     template_name = "dashboard/admin/products/product-list.html"
@@ -51,3 +54,17 @@ class AdminProductListView(LoginRequiredMixin, HasAdminAccessPermission, ListVie
             ProductCategoryModel.objects.all()
         )  # List of all product categories
         return context
+
+
+class AdminProductEditView(
+    LoginRequiredMixin, HasAdminAccessPermission, SuccessMessageMixin, UpdateView
+):
+    template_name = "dashboard/admin/products/product-edit.html"
+    queryset = ProductModel.objects.all()
+    form_class = ProductForm
+    success_message = "ویرایش محصول با موفقیت انجام شد"
+
+    def get_success_url(self):
+        return reverse_lazy(
+            "dashboard:admin:product-edit", kwargs={"pk": self.get_object().pk}
+        )

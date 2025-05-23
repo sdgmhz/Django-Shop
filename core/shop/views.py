@@ -17,9 +17,7 @@ class ShopProductGridView(ListView):
 
     def get_queryset(self):
         """Return the filtered product list based on query parameters"""
-        queryset = ProductModel.objects.filter(
-            status=ProductStatusType.published.value
-        )
+        queryset = ProductModel.objects.filter(status=ProductStatusType.published.value)
 
         # Filter by search query if provided
         if search_q := self.request.GET.get("q"):

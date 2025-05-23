@@ -45,3 +45,10 @@ class AdminProfileEditForm(forms.ModelForm):
         self.fields["first_name"].widget.attrs["class"] = "form-control"
         self.fields["last_name"].widget.attrs["class"] = "form-control"
         self.fields["phone_number"].widget.attrs["class"] = "form-control text-center"
+        self.fields["first_name"].widget.attrs["placeholder"] = "نام را وارد کنید"
+        self.fields["last_name"].widget.attrs[
+            "placeholder"
+        ] = "نام خانوادگی را وارد کنید"
+        self.fields["phone_number"].widget.attrs[
+            "placeholder"
+        ] = "نلفن همراه را وارد کنید"
