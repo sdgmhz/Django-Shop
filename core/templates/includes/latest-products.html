@@ -69,10 +69,15 @@
                               <span class="ms-1">{{latest_product.avg_rate}}/5</span>
                       </a>
                       <!-- End Rating -->
+                       {% if latest_product.stock != 0 %}
 
                       <button type="button" class="btn btn-outline-primary btn-sm btn-transition rounded-pill"
                           onclick="addToCart('{{latest_product.id}}')">افزودن به سبد
                           خرید</button>
+                        {% else %}
+                        <button type="button" disabled class="btn btn-outline-primary btn-sm btn-transition btn-info rounded-pill"
+                          >ناموجود</button>
+                        {% endif %}
                   </div>
               </div>
               <!-- End Card -->

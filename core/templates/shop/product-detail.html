@@ -26,6 +26,14 @@
                       <img class="card-img" src="{{object.image.url}}" alt="Image Description">
                     </div>
                   </div>
+                  {% for extra_image in object.extra_image.all %}
+                  <div class="swiper-slide">
+                    <div class="card card-bordered shadow-none">
+                      <img class="card-img" src="{{extra_image.file.url}}" alt="Image Description">
+                    </div>
+                  </div>
+                  
+                  {% endfor %}
                   <!-- End Slide -->
                   
                 </div>
@@ -46,6 +54,14 @@
                         <img class="avatar-img" src="{{object.image.url}}" alt="Image Description">
                       </a>
                     </div>
+                    {% for extra_image in object.extra_image.all %}
+                    <div class="swiper-slide">
+                        <a class="avatar avatar-circle" href="javascript:;">
+                            <img class="avatar-img" src="{{extra_image.file.url}}"
+                                alt="Image Description">
+                        </a>
+                    </div>
+                    {% endfor %}
                     <!-- End Slide -->
 
                   </div>
@@ -148,6 +164,7 @@
             </div>
             <!-- End Collapse -->
           </div>
+          {% if object.stock != 0 %}
           {% if matching_item %}
 
           <div class="quantity-counter mb-3">
@@ -201,6 +218,10 @@
                 <button type="button" onclick="addToCart('{{object.id}}')" class="btn btn-primary btntransition">افزودن به سبد خرید</button>
           </div>
           {% endif %}
+          {% else %}
+                        <button type="button" disabled class="btn btn-outline-primary btn-sm btn-transition btn-info rounded-pill"
+                          >این کالا در حال حاضر موجود نیست</button>
+                              {% endif %}
           <!-- Quantity -->
           
 
@@ -653,6 +674,28 @@
             }
         });
   }
+
+        // INITIALIZATION OF SWIPER
+      // =======================================================
+      var swiper = new Swiper('.js-swiper-shop-product',{
+        effect: 'fade',
+        autoplay: true,
+        loop: true,
+        navigation: {
+          nextEl: '.js-swiper-shop-product-button-next',
+          prevEl: '.js-swiper-shop-product-button-prev',
+        },
+        thumbs: {
+          swiper: sliderThumbs
+        }
+      });
+
+      var sliderThumbs = new Swiper('.js-swiper-shop-product-thumb', {
+        slidesPerView: 3,
+        watchSlidesVisibility: true,
+        watchSlidesProgress: true,
+        history: false,
+      });
 
 </script>
 {% endblock extra_js %}
