@@ -26,6 +26,14 @@
                       <img class="card-img" src="{{object.image.url}}" alt="Image Description">
                     </div>
                   </div>
+                  {% for extra_image in object.extra_image.all %}
+                  <div class="swiper-slide">
+                    <div class="card card-bordered shadow-none">
+                      <img class="card-img" src="{{extra_image.file.url}}" alt="Image Description">
+                    </div>
+                  </div>
+                  
+                  {% endfor %}
                   <!-- End Slide -->
                   
                 </div>
@@ -46,6 +54,14 @@
                         <img class="avatar-img" src="{{object.image.url}}" alt="Image Description">
                       </a>
                     </div>
+                    {% for extra_image in object.extra_image.all %}
+                    <div class="swiper-slide">
+                        <a class="avatar avatar-circle" href="javascript:;">
+                            <img class="avatar-img" src="{{extra_image.file.url}}"
+                                alt="Image Description">
+                        </a>
+                    </div>
+                    {% endfor %}
                     <!-- End Slide -->
 
                   </div>
@@ -658,6 +674,28 @@
             }
         });
   }
+
+        // INITIALIZATION OF SWIPER
+      // =======================================================
+      var swiper = new Swiper('.js-swiper-shop-product',{
+        effect: 'fade',
+        autoplay: true,
+        loop: true,
+        navigation: {
+          nextEl: '.js-swiper-shop-product-button-next',
+          prevEl: '.js-swiper-shop-product-button-prev',
+        },
+        thumbs: {
+          swiper: sliderThumbs
+        }
+      });
+
+      var sliderThumbs = new Swiper('.js-swiper-shop-product-thumb', {
+        slidesPerView: 3,
+        watchSlidesVisibility: true,
+        watchSlidesProgress: true,
+        history: false,
+      });
 
 </script>
 {% endblock extra_js %}

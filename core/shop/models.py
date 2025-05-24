@@ -75,7 +75,7 @@ class ProductModel(models.Model):
 class ProductImageModel(models.Model):
     """Model representing extra images for a product"""
 
-    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE)
+    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, related_name="extra_image")
     file = models.ImageField(upload_to="product/extra-img/")
 
     created_date = models.DateTimeField(auto_now_add=True)

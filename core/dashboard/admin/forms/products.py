@@ -1,7 +1,7 @@
 from django import forms
 from ckeditor.fields import RichTextFormField
 
-from shop.models import ProductModel
+from shop.models import ProductModel, ProductImageModel
 
 
 class ProductForm(forms.ModelForm):
@@ -35,3 +35,15 @@ class ProductForm(forms.ModelForm):
         self.fields["status"].widget.attrs["class"] = "form-select"
         self.fields["price"].widget.attrs["class"] = "form-control"
         self.fields["discount_percent"].widget.attrs["class"] = "form-control"
+
+
+class ProductExtraImageForm(forms.ModelForm):
+
+    class Meta:
+        model = ProductImageModel
+        fields = ("file",)
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['file'].widget.attrs['class'] = 'form-control'
+        self.fields['file'].widget.attrs['accept'] = 'image/png, image/jpg, image/jpeg'

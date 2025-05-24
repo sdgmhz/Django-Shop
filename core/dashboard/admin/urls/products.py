@@ -18,4 +18,6 @@ urlpatterns = [
         views.AdminProductDeleteView.as_view(),
         name="product-delete",
     ),
+    path("product/<int:pk>/add-extra-image/",views.AdminProductAddExtraImageView.as_view(),name="product-add-extra-image"),
+    path("product/<int:pk>/extra-image/<int:image_id>/remove/",views.AdminProductRemoveExtraImageView.as_view(),name="product-remove-extra-image"),
 ]
