@@ -25,9 +25,9 @@ urlpatterns = [
     ),
     # Route to view session cart summary
     path(
-        "session/cart/summary/",
-        views.SessionCartSummaryView.as_view(),
-        name="session-cart-summary",
+        "summary/",
+        views.CartSummaryView.as_view(),
+        name="cart-summary",
     ),
     # Route to increase product quantity in session cart
     path(

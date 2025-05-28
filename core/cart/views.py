@@ -80,7 +80,7 @@ class SessionUpdateProductQuantityView(View):
         )
 
 
-class SessionCartSummaryView(TemplateView):
+class CartSummaryView(TemplateView):
     """View to display the session cart summary"""
 
     template_name = "cart/cart-summary.html"
