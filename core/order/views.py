@@ -1,7 +1,7 @@
 from django.views.generic import FormView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-
+from decimal import Decimal
 from .permissions import HasCustomerAccessPermission
 from .models import UserAddressModel, OrderModel, OrderItemModel
 from .forms import CheckOutForm
@@ -19,33 +19,56 @@ class OrderCheckOutView(LoginRequiredMixin, HasCustomerAccessPermission, FormVie
         return kwargs
 
     def form_valid(self, form):
+        user = self.request.user
         cleaned_data = form.cleaned_data
         address = cleaned_data["address_id"]
-        cart = CartModel.objects.get(user=self.request.user)
-        cart_items = cart.cart_items.all()
-        order = OrderModel.objects.create(
+        coupon = cleaned_data["coupon"]
+
+        cart = CartModel.objects.get(user=user)
+        order = self.create_order(address)
+
+        self.create_order_items(order, cart)
+        self.clear_cart(cart)
+       
+        total_price = order.calculate_total_price()
+        self.apply_coupon(coupon, order, user, total_price)
+        
+        order.save()
+
+        return super().form_valid(form)
+    
+    def create_order(self, address):
+        return OrderModel.objects.create(
             user = self.request.user,
             address = address.address,
             state = address.state,
             city = address.city,
             zip_code = address.zip_code,
         )
-
-        for item in cart_items:
+    
+    def create_order_items(self, order, cart):
+        for item in cart.cart_items.all():
             OrderItemModel.objects.create(
                 order=order,
                 product=item.product,
                 quantity=item.quantity,
                 price=item.product.get_price()
             )
-        cart_items.delete()
+
+    def clear_cart(self, cart):
+        cart.cart_items.all().delete()
         CartSession(self.request.session).clear()
 
+    def apply_coupon(self, coupon, order, user, total_price):
+        if coupon:
+            total_price -= round(total_price * Decimal(coupon.discount_percent/100))
+            order.coupon = coupon
+            coupon.used_by.add(user)
+            coupon.save()
             
-        order.total_price = order.calculate_total_price()
-        order.save()
+        order.total_price = total_price
 
-        return super().form_valid(form)
+
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
