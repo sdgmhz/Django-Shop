@@ -117,6 +117,8 @@ class CartSession:
 
 
     def merge_session_cart_in_db(self, user):
+        if not user or not user.is_authenticated:
+            return
         cart, created = CartModel.objects.get_or_create(user=user)
 
         for item in self._cart["items"]:
@@ -134,24 +136,4 @@ class CartSession:
 
         CartItemModel.objects.filter(cart=cart).exclude(product__id__in=session_product_ids).delete()
 
-
-
-        # cart, created = CartModel.objects.get_or_create(user=user)
-        # cart_items = CartItemModel.objects.filter(cart=cart)
-        # session_product_ids = [item["product_id"] for item in self._cart["items"]]
-
-        # for cart_item in cart_items:
-        #     if str(cart_item.product.id) not in session_product_ids:
-        #         cart_item.delete()
-
-        # for item in self._cart["items"]:
-        #     product_id = item["product_id"]
-        #     quantity = item["quantity"]
-        #     cart_item, created = CartItemModel.objects.get_or_create(
-        #         cart=cart, product_id=product_id,
-        #         defaults={"quantity": quantity}
-        #     )
-        #     if not created:
-        #         cart_item.quantity = quantity
-        #         cart_item.save()
         
