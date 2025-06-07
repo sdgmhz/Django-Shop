@@ -31,13 +31,13 @@ urlpatterns = [
     ),
     # Route to increase product quantity in session cart
     path(
-        "session/increase-product-quantity",
+        "session/increase-product-quantity/",
         views.SessionIncreaseProductQuantityView.as_view(),
         name="session-increase-product-quantity",
     ),
     # Route to decrease product quantity in session cart
     path(
-        "session/decrease-product-quantity",
+        "session/decrease-product-quantity/",
         views.SessionDecreaseProductQuantityView.as_view(),
         name="session-decrease-product-quantity",
     ),
