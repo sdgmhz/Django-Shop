@@ -1,6 +1,7 @@
 # main modules
 django>4.2,<4.3
 pillow
+requests
 
 # env controller
 python-decouple

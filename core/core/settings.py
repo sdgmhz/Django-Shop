@@ -203,3 +203,7 @@ CKEDITOR_CONFIGS = {
         'width': '100%',
     },
 }
+
+# payment gateway settings
+MERCHANT_ID = config("MERCHANT_ID",default="927d65e3-923b-4efa-9922-1fff10f166e3")
+SANDBOX_MODE = config("SANDBOX", cast=bool, default=True)
