@@ -7,6 +7,7 @@ class PaymentModelAdmin(admin.ModelAdmin):
     list_display = [
         "id",
         "authority_id",
+        "amount",
         "response_code",
         "status",
         "created_date",

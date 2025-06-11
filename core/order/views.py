@@ -4,12 +4,16 @@ from django.urls import reverse_lazy
 from decimal import Decimal
 from django.http import JsonResponse
 from django.utils import timezone
+from django.shortcuts import redirect
 
 from .permissions import HasCustomerAccessPermission
 from .models import UserAddressModel, OrderModel, OrderItemModel, CouponModel
 from .forms import CheckOutForm
 from cart.models import CartModel
 from cart.cart import CartSession
+from payment.zarinpal_client import ZarinPalSandbox
+from payment.models import PaymentModel
+
 
 class OrderCheckOutView(LoginRequiredMixin, HasCustomerAccessPermission, FormView):
     template_name = "order/checkout.html"
@@ -37,8 +41,20 @@ class OrderCheckOutView(LoginRequiredMixin, HasCustomerAccessPermission, FormVie
         self.apply_coupon(coupon, order, user, total_price)
         
         order.save()
+        
+        return redirect(self.create_payment_url(order))
+    
+    def create_payment_url(self, order):
+        zarin_pal = ZarinPalSandbox()
+        response = zarin_pal.payment_request(amount=order.total_price)
+        payment_obj = PaymentModel.objects.create(
+            authority_id=response.get("data", {}).get("authority"),
+            amount=order.total_price,
+        )
+        order.payment = payment_obj
+        order.save()
+        return zarin_pal.generate_payment_url(response.get("data", {}).get("authority"))
 
-        return super().form_valid(form)
     
     def create_order(self, address):
         return OrderModel.objects.create(
@@ -86,6 +102,10 @@ class OrderCheckOutView(LoginRequiredMixin, HasCustomerAccessPermission, FormVie
 
 class OrderCompletedView(LoginRequiredMixin, HasCustomerAccessPermission, TemplateView):
     template_name = "order/completed.html"
+
+
+class OrderFailedView(LoginRequiredMixin, HasCustomerAccessPermission, TemplateView):
+    template_name = "order/failed.html"
     
 
 class ValidateCouponView(LoginRequiredMixin, HasCustomerAccessPermission, View):
