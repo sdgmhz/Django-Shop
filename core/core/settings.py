@@ -208,3 +208,5 @@ CKEDITOR_CONFIGS = {
 # payment gateway settings
 MERCHANT_ID = config("MERCHANT_ID",default="927d65e3-923b-4efa-9922-1fff10f166e3")
 SANDBOX_MODE = config("SANDBOX", cast=bool, default=True)
+
+IDPAY_API_KEY = config("IDPAY_API_KEY", default="demo_api_key")
