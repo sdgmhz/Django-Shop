@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "cart.apps.CartConfig",
     "dashboard.apps.DashboardConfig",
     "order.apps.OrderConfig",
+    "payment.apps.PaymentConfig",
     # third party apps
     "captcha",
     "ckeditor",
@@ -203,3 +204,9 @@ CKEDITOR_CONFIGS = {
         'width': '100%',
     },
 }
+
+# payment gateway settings
+MERCHANT_ID = config("MERCHANT_ID",default="927d65e3-923b-4efa-9922-1fff10f166e3")
+SANDBOX_MODE = config("SANDBOX", cast=bool, default=True)
+
+IDPAY_API_KEY = config("IDPAY_API_KEY", default="demo_api_key")
