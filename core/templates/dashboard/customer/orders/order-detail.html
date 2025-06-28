@@ -28,7 +28,9 @@
             <div class="card-header border-bottom">
               <div class="d-flex justify-content-between align-items-center">
                 <h5 class="">سفارش شماره {{object.id}}</h5>
+                {% if object.is_successful %}
                 <a class="btn btn-primary" href="#" target="_blank">مشاهده فاکتور</a>
+                {% endif %}
               </div>
             </div>
             <!-- End Header -->
@@ -91,6 +93,14 @@
                   <dl class="col-md-3 formatted-price">{{object.total_price}}</dl>
                 </div>
                 <!-- End Row -->
+                {% if object.coupon %}
+                <div class="row mb-3">
+                  <dt class="col-md-3">تخفیف</dt>
+                  <dl class="col-md-3">{{object.coupon.discount_percent}}%</dl>
+                  <dt class="col-md-3">قیمت با اعمال تخفیف</dt>
+                  <dl class="col-md-3 formatted-price">{{object.get_price}}</dl>
+                </div>
+                {% endif %}
                 <div class="row mb-3">
                   <dt class="col-md-3"> آدرس:</dt>
                   <dl class="col-md-3">{{object.get_full_address}}</dl>
