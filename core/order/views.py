@@ -32,9 +32,20 @@ class OrderCheckOutView(LoginRequiredMixin, HasCustomerAccessPermission, FormVie
         coupon = cleaned_data["coupon"]
 
         cart = CartModel.objects.get(user=user)
+
+        # check inventory before creating an order
+        for item in cart.cart_items.all():
+            if item.quantity > item.product.stock:
+                form.add_error(None, f"موجودی کافی برای {item.product.title} وجود ندارد")
+                return self.form_invalid(form)
+            
         order = self.create_order(address)
 
         self.create_order_items(order, cart)
+
+        # reducing product inventory
+        self.reduce_product_stock(cart)
+
         self.clear_cart(cart)
        
         total_price = order.calculate_total_price()
@@ -43,6 +54,12 @@ class OrderCheckOutView(LoginRequiredMixin, HasCustomerAccessPermission, FormVie
         order.save()
         
         return redirect(self.create_payment_url(order))
+    
+    def reduce_product_stock(self, cart):
+        for item in cart.cart_items.all():
+            product = item.product
+            product.stock -= item.quantity
+            product.save()
     
     def create_payment_url(self, order):
         zarin_pal = ZarinPalSandbox()
@@ -80,9 +97,6 @@ class OrderCheckOutView(LoginRequiredMixin, HasCustomerAccessPermission, FormVie
 
     def apply_coupon(self, coupon, order, user, total_price):
         if coupon:
-            # total_price -= round(total_price * Decimal(coupon.discount_percent/100))
-
-
             order.coupon = coupon
             coupon.used_by.add(user)
             coupon.save()
