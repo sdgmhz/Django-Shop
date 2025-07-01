@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from decimal import Decimal
 
 
 
@@ -53,12 +54,36 @@ class OrderModel(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        ordering = ["-created_date"]
+
+
     def calculate_total_price(self):
         return sum(item.price * item.quantity for item in self.order_items.all())
     
     def __str__(self):
         return f'{self.user.email}-{self.id}'
 
+    def get_status(self):
+        return {
+            "id": self.status,
+            "title": OrderStatusType(self.status).name,
+            "label": OrderStatusType(self.status).label,
+        }
+
+    def get_full_address(self):
+        return f"{self.state}، {self.city}، {self.address}"
+    
+    @property
+    def is_successful(self):
+        return self.status == OrderStatusType.success.value
+    
+    def get_price(self):
+        if self.coupon:            
+            return round(self.total_price - (self.total_price * Decimal( self.coupon.discount_percent /100)))
+        else:
+            return self.total_price
+    
 
 class OrderItemModel(models.Model):
     order = models.ForeignKey(OrderModel, on_delete=models.CASCADE, related_name="order_items")
