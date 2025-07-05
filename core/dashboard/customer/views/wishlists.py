@@ -1,6 +1,8 @@
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import FieldError
+from django.urls import reverse_lazy
+from django.contrib.messages.views import SuccessMessageMixin
 
 
 from shop.models import WishlistProductModel
@@ -34,3 +36,12 @@ class CustomerWishlistListView(
         context = super().get_context_data(**kwargs)
         context["total_items"] = self.get_queryset().count()  
         return context
+    
+
+class CustomerWishlistDeleteView(LoginRequiredMixin, HasCustomerAccessPermission, SuccessMessageMixin, DeleteView):
+    http_method_names = ["post"]
+    success_url = reverse_lazy("dashboard:customer:wishlist-list")
+    success_message = "محصول با موفقیت از لیست علایق شما حذف شد."
+
+    def get_queryset(self):
+        return WishlistProductModel.objects.filter(user=self.request.user)

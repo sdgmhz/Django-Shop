@@ -68,9 +68,12 @@
                         <div class="col-sm-3">
                           <div class="col-auto">
                             <div class="d-grid gap-2">
-                              <a class="link-sm link-danger small" href="javascript:;">
+                              <form action="{% url "dashboard:customer:wishlist-delete" pk=object.pk %}" method="post">
+                                {% csrf_token %}
+                              <button type="submit" class="btn btn-sm btn-outline-danger" >
                                 <i class="bi-trash me-1"></i> حذف
                               </a>
+                              </form>
                             </div>
                           </div>
                           <!-- End Col -->
