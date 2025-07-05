@@ -11,7 +11,7 @@ def show_latest_products(context, arg=8):
     latest_products = ProductModel.objects.filter(
         status=ProductStatusType.published.value
     ).order_by("-created_date")[:arg]
-    wishlist_items = WishlistProductModel.objects.filter(user=request.user).values_list('product__id', flat=True)
+    wishlist_items = WishlistProductModel.objects.filter(user=request.user).values_list('product__id', flat=True) if request.user.is_authenticated else []
     return {"latest_products": latest_products, "request": request, "wishlist_items": wishlist_items}
 
 
@@ -28,5 +28,5 @@ def show_similar_products(context, product):
         .order_by("-created_date")
         .distinct()[:4]
     )
-    wishlist_items = WishlistProductModel.objects.filter(user=request.user).values_list('product__id', flat=True)
+    wishlist_items = WishlistProductModel.objects.filter(user=request.user).values_list('product__id', flat=True) if request.user.is_authenticated else []
     return {"similar_products": similar_products, "request": request, "wishlist_items": wishlist_items}
