@@ -1,7 +1,7 @@
 from django.views.generic import ListView, DetailView
 from django.core.exceptions import FieldError
 
-from .models import ProductModel, ProductStatusType, ProductCategoryModel
+from .models import ProductModel, ProductStatusType, ProductCategoryModel, WishlistProductModel
 from cart.cart import CartSession
 
 
@@ -51,6 +51,7 @@ class ShopProductGridView(ListView):
         context["categories"] = (
             ProductCategoryModel.objects.all()
         )  # List of all product categories
+        context["wishlist_items"] = WishlistProductModel.objects.filter(user=self.request.user).values_list('product__id', flat=True)
         return context
 
 
@@ -72,4 +73,5 @@ class ShopProductDetailView(DetailView):
             None,
         )
         context["matching_item"] = matching_item
+        context["is_wished"] = WishlistProductModel.objects.filter(user=self.request.user, product__id=self.get_object().id).exists()
         return context
