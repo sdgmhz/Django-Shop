@@ -5,6 +5,7 @@ from django.http import JsonResponse
 
 from .models import ProductModel, ProductStatusType, ProductCategoryModel, WishlistProductModel
 from cart.cart import CartSession
+from review.models import ReviewModel, ReviewStatusType
 
 
 class ShopProductGridView(ListView):
@@ -76,6 +77,7 @@ class ShopProductDetailView(DetailView):
         )
         context["matching_item"] = matching_item
         context["is_wished"] = WishlistProductModel.objects.filter(user=self.request.user, product__id=self.get_object().id).exists() if self.request.user.is_authenticated else False
+        context["reviews"] = ReviewModel.objects.filter(status=ReviewStatusType.accepted.value, product=self.get_object())
         return context
     
 
