@@ -26,6 +26,14 @@ class ReviewModel(models.Model):
 
     def __str__(self):
         return f"{self.user}-{self.product.title}"
+    
+    def get_status(self):
+        return {
+            "id":self.status,
+            "title":ReviewStatusType(self.status).name,
+            "label":ReviewStatusType(self.status).label,
+        }
+        
 
 @receiver(post_save, sender=ReviewModel)
 def calculate_avf_review(sender, instance, created, **kwargs):
