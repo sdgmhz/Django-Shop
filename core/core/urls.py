@@ -31,6 +31,7 @@ urlpatterns = [
     path("dashboard/", include("dashboard.urls")),
     path("order/", include("order.urls")),
     path("payment/", include("payment.urls")),
+    path("review/", include("review.urls")),
     path("captcha/", include("captcha.urls")),
     path("refresh-captcha/", refresh_captcha, name="captcha-refresh"),
 ]

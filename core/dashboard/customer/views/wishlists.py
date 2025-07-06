@@ -1,4 +1,4 @@
-from django.views.generic import ListView, DetailView, DeleteView
+from django.views.generic import ListView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import FieldError
 from django.urls import reverse_lazy
