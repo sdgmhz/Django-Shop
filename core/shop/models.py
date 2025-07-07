@@ -41,11 +41,14 @@ class ProductModel(models.Model):
     )
     description = models.TextField()
     brief_description = models.TextField(null=True, blank=True)
+
     stock = models.PositiveIntegerField(default=0)
     price = models.DecimalField(default=0, max_digits=10, decimal_places=0)
     discount_percent = models.IntegerField(
         default=0, validators=[MinValueValidator(0), MaxValueValidator(100)]
     )
+    avg_rate = models.FloatField(default=0.0)
+
     status = models.IntegerField(
         choices=ProductStatusType.choices, default=ProductStatusType.draft.value
     )

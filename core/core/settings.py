@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "dashboard.apps.DashboardConfig",
     "order.apps.OrderConfig",
     "payment.apps.PaymentConfig",
+    "review.apps.ReviewConfig",
     # third party apps
     "captcha",
     "ckeditor",
